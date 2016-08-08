@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>性能监控</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+		<!--<script src="js/vendor/flexible.js"></script>-->
+		<link href="css/animate.css" rel="stylesheet" type="text/css" />
+		<script>
+			var pStart = Date.now();
+		</script>
+		<script src="js/vendor/zepto.js" onloadstart="console.log(Date.now())" onload="console.log(Date.now() - pStart)"></script>
+		<script src="js/vendor/touch.js"></script>
+		<script src="js/vendor/useragent.js"></script>
+		<script type='text/javascript'>
+	      window.primus || (primus={});
+	      primus.param = {
+	        "token":"dsadasd2323dsad23dsada",
+	        "backgroundImages":[]
+	      };
+//	      var script = document.createElement("script");
+//        script.src = "js/primus.js";
+//        document.getElementsByTagName('head')[0].appendChild(script);
+	    </script>
+	    <script src="js/primus.js"></script>
+	    <!--<script>-->
+			<!--var scripts = document.getElementsByTagName('script');-->
+			<!--scripts = [].slice.call(scripts);-->
+			<!--console.log(scripts)-->
+			<!--scripts.forEach(function(script) {-->
+				<!--script.addEventListener('load', function() {-->
+					<!--console.log(Date.now());-->
+				<!--}, false);-->
+			<!--});-->
+		<!--</script>-->
+	</head>
+	<body>
+		<img src="img/logo.png" width="20%"/>
+		<img src="img/1.png" width="20%"/>
+		<img src="img/2.png" width="20%"/>
+		<img src="img/3.png" width="20%"/>
+		<img src="img/4.png" width="20%"/>
+		
+		<img src="http://h5.eclicks.cn/2016/hr/img/p2/5.png" width="20%" />
+		<img src="http://h5.eclicks.cn/2016/hr/img/p2/6.png" width="20%" />
+		<img src="http://h5.eclicks.cn/2016/hr/img/p2/4.png" width="20%" />
+		<img src="http://h5.eclicks.cn/2016/hr/img/p2/3.png" width="20%" />
+		<img src="http://h5.eclicks.cn/2016/hr/img/p2/2.png" width="20%" />
+		<img src="http://chelun.eclicks.cn/static/pkzt/images/car-01.png" width="20%" />
+
+		<h3>performance属性</h3>
+		<div id="performance"></div>
+		<h3>performance.getEntries</h3>
+		<div id="resource"></div>
+		<h3>统计时间</h3>
+		<div id="show"></div>
+		<h3>performance.Now间隔时间</h3>
+		<div id="now"></div>
+		<h3>网络状态</h3>
+		<div id="network"></div>
+		<h2 id="progress" style="display:block;">JavaScript is turned off, or your browser is realllllly slow</h2>
+		<h3>AJAX监控</h3>
+		<div id="ajax"></div>
+		<h3>UA信息</h3>
+		<div id="ua"></div>
+		<h3>分辨率</h3>
+		<div id="dpi"></div>
+		
+		<!---->
+		<script>
+		//http://stackoverflow.com/questions/5529718/how-to-detect-internet-speed-in-javascript
+		var imageAddr = "http://h5dev.eclicks.cn/libs/common/img/bandwidth-5.png";
+		var downloadSize = 4511798; //bytes
+		/**
+		 * 网速测量
+		 * @type {string}
+		 */
+		function ShowProgressMessage(msg) {
+		    if (console) {
+		        if (typeof msg == "string") {
+		            console.log(msg);
+		        } else {
+		            for (var i = 0; i < msg.length; i++) {
+		                console.log(msg[i]);
+		            }
+		        }
+		    }
+
+		    var oProgress = document.getElementById("progress");
+		    if (oProgress) {
+		        var actualHTML = (typeof msg == "string") ? msg : msg.join("<br />");
+		        oProgress.innerHTML = actualHTML;
+		    }
+		}
+
+		function InitiateSpeedDetection() {
+		    ShowProgressMessage("Loading the image, please wait...");
+		    window.setTimeout(MeasureConnectionSpeed, 1);
+		};
+
+		if (window.addEventListener) {
+		    window.addEventListener('load', InitiateSpeedDetection, false);
+		} else if (window.attachEvent) {
+		    window.attachEvent('onload', InitiateSpeedDetection);
+		}
+
+		function MeasureConnectionSpeed() {
+		    var startTime, endTime;
+		    var download = new Image();
+		    download.onload = function () {
+		        endTime = (new Date()).getTime();
+		        showResults();
+		    }
+
+		    download.onerror = function (err, msg) {
+		        ShowProgressMessage("Invalid image, or error downloading");
+		    }
+
+		    startTime = (new Date()).getTime();
+		    var cacheBuster = "?nnn=" + startTime;
+		    download.src = imageAddr + cacheBuster;
+
+		    function showResults() {
+		        var duration = (endTime - startTime) / 1000;
+		        var bitsLoaded = downloadSize * 8;
+		        var speedBps = (bitsLoaded / duration).toFixed(2);
+		        var speedKbps = (speedBps / 1024).toFixed(2);
+		        var speedMbps = (speedKbps / 1024).toFixed(2);
+		        ShowProgressMessage([
+		            "Your connection speed is:",
+		            speedBps + " bps",
+		            speedKbps + " kbps",
+		            speedMbps + " Mbps"
+		        ]);
+		    }
+		}
+		</script>
+
+		<script>
+			function isFunction(obj) {
+				return Object.prototype.toString.call(obj) == '[object Function]';
+			}
+			function isNotFunction(obj) {
+				return !isFunction(obj);
+			}
+
+			function innerHTML(id, content) {
+				document.getElementById(id).innerHTML = content;
+			}
+
+			var start = primus.now();
+			primus.mark('start');
+
+			//performance对象
+			var performances = primus.print(primus.performance, '<p>', '</p>');
+			innerHTML('performance', performances.join(''));
+
+			//网络状态
+			var network = primus.print(primus.network(), '<p>', '</p>');
+			innerHTML('network', network.join(''));
+//			var network = primus.network();
+//			document.getElementById('network').innerHTML = network;
+
+			$.get('./ajax/data.json', function(json) {
+				//console.log(json);
+			}, 'json');
+			$.ajax({
+		        type: 'GET',
+		        url: './ajax/data2.json',
+		        data: {},
+		        dataType: 'json',
+		        success: function(json) {
+
+		        }
+		        //error: function(xhr, errorType, error) {
+		        //    alert(error);
+		        //}
+		    });
+			window.onload = function() {
+				setTimeout(function() {
+					var time = primus.getTimes();
+					if (time !== false) {
+						var html = primus.print(time, '<p>', '</p>');
+						innerHTML('show', html.join(''));
+					}
+					//网络瀑布信息
+					var entries = primus.getEntries();
+					if (entries !== false) {
+						var resource = document.getElementById('resource');
+						var resourceHtml = [];
+						entries.forEach(function(entry) {
+							var resources = [];
+							for (var key in entry) {
+								if (!isFunction(entry[key]))
+									resources.push(key + ':' + entry[key]);
+							}
+							resourceHtml.push('<p>' + resources.join('&nbsp;') + '</p>');
+						});
+						innerHTML('resource', resourceHtml.join(''));
+					}
+					//ajax统计信息
+					var ajaxs = primus.ajaxs;
+					var ajaxHtml = [];
+					ajaxs.forEach(function(ajax) {
+						var resources = [];
+						for (var key in ajax) {
+							resources.push(key + ':' + ajax[key]);
+						}
+						ajaxHtml.push('<p>' + resources.join('&nbsp;') + '</p>');
+					});
+					innerHTML('ajax', ajaxHtml.join(''));
+					//UA代理信息
+					var ua = primus.ua();
+					var uaHTML = [];
+					for(var key in ua) {
+						var vaule = ua[key];
+						if(typeof vaule == "object") {
+							var uaHTML2 = [];
+							for(var key2 in vaule) {
+								if(key2 == 'ua') continue;
+								uaHTML2.push(key2 + ':' + vaule[key2]);
+							}
+							uaHTML.push('<p><strong>'+ key +'</strong> '+ uaHTML2.join('&nbsp;') +'</p>');
+						}else {
+							uaHTML.push('<p>'+ vaule +'</p>');
+						}
+					}
+					innerHTML('ua', uaHTML.join(''));
+
+				}, 200);
+				var end = primus.now();
+				innerHTML('now', end - start);
+				//分辨率
+				var dpi = primus.dpi();
+				dpi = '<p>' + dpi.width +'*' + dpi.height + '</p>';
+				innerHTML('dpi', dpi);
+
+				primus.mark('end');
+				var measure = primus.measure('start', 'end');
+				console.log(measure)
+			};
+		</script>
+
+	</body>
+</html>
