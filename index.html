@@ -42,12 +42,11 @@
 		<img src="img/3.png" width="20%"/>
 		<img src="img/4.png" width="20%"/>
 		
-		<img src="http://h5.eclicks.cn/2016/hr/img/p2/5.png" width="20%" />
-		<img src="http://h5.eclicks.cn/2016/hr/img/p2/6.png" width="20%" />
-		<img src="http://h5.eclicks.cn/2016/hr/img/p2/4.png" width="20%" />
-		<img src="http://h5.eclicks.cn/2016/hr/img/p2/3.png" width="20%" />
-		<img src="http://h5.eclicks.cn/2016/hr/img/p2/2.png" width="20%" />
-		<img src="http://chelun.eclicks.cn/static/pkzt/images/car-01.png" width="20%" />
+		<img src="http://www.pwstrick.com/demo/images/primus/5.png" width="20%" />
+		<img src="http://www.pwstrick.com/demo/images/primus/6.png" width="20%" />
+		<img src="http://www.pwstrick.com/demo/images/primus/4.png" width="20%" />
+		<img src="http://www.pwstrick.com/demo/images/primus/3.png" width="20%" />
+		<img src="http://www.pwstrick.com/demo/images/primus/2.png" width="20%" />
 
 		<h3>performance属性</h3>
 		<div id="performance"></div>
@@ -70,7 +69,7 @@
 		<!---->
 		<script>
 		//http://stackoverflow.com/questions/5529718/how-to-detect-internet-speed-in-javascript
-		var imageAddr = "http://h5dev.eclicks.cn/libs/common/img/bandwidth-5.png";
+		var imageAddr = "http://www.pwstrick.com/demo/images/primus/image-5.png";
 		var downloadSize = 4511798; //bytes
 		/**
 		 * 网速测量
@@ -152,7 +151,7 @@
 			var start = primus.now();
 			primus.mark('start');
 
-			//performance对象
+			//将当前浏览器支持的performance对象中的方法和属性打印出来
 			var performances = primus.print(primus.performance, '<p>', '</p>');
 			innerHTML('performance', performances.join(''));
 
